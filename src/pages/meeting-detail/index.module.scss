@@ -160,11 +160,19 @@
           color: $color-success;
           font-size: $font-size-xs;
           border-radius: $radius-sm;
+
+          &:active {
+            opacity: 0.7;
+          }
         }
       }
 
-      .topicConclusion {
+      .topicContent {
         margin-left: 56rpx;
+      }
+
+      .topicConclusion {
+        margin-bottom: $spacing-sm;
         padding: $spacing-sm $spacing-md;
         background-color: $color-bg-page;
         border-radius: $radius-sm;
@@ -200,6 +208,62 @@
         }
       }
 
+      .topicMeta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-md;
+        margin-bottom: $spacing-sm;
+
+        .metaItem {
+          display: flex;
+          align-items: center;
+          font-size: $font-size-xs;
+          color: $color-text-tertiary;
+
+          .avatar {
+            width: 32rpx;
+            height: 32rpx;
+            border-radius: $radius-round;
+            margin-right: 8rpx;
+          }
+        }
+      }
+
+      .topicActions {
+        display: flex;
+        gap: $spacing-sm;
+
+        .actionBtn {
+          padding: $spacing-xs $spacing-md;
+          border-radius: $radius-sm;
+          font-size: $font-size-sm;
+          color: $color-text-secondary;
+          background-color: $color-bg-page;
+
+          &.primary {
+            background-color: rgba(47, 107, 255, 0.1);
+            color: $color-primary;
+            font-weight: $font-weight-medium;
+          }
+
+          &:active {
+            opacity: 0.7;
+          }
+        }
+      }
+
+      .viewTaskBtn {
+        margin-top: $spacing-sm;
+        padding: $spacing-xs 0;
+        font-size: $font-size-sm;
+        color: $color-primary;
+        font-weight: $font-weight-medium;
+
+        &:active {
+          opacity: 0.7;
+        }
+      }
+
       .topicAssignee {
         margin-left: 56rpx;
         margin-top: $spacing-sm;
@@ -229,11 +293,141 @@
   }
 }
 
+.topicEditPanel {
+  margin-left: 56rpx;
+  padding: $spacing-md;
+  background-color: $color-bg-page;
+  border-radius: $radius-sm;
+
+  .editField {
+    margin-bottom: $spacing-md;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .editLabel {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      margin-bottom: $spacing-xs;
+      font-weight: $font-weight-medium;
+    }
+
+    .editTextarea {
+      width: 100%;
+      padding: $spacing-sm;
+      background-color: $color-bg-card;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+      min-height: 120rpx;
+      box-sizing: border-box;
+    }
+
+    .editPicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $spacing-sm;
+      background-color: $color-bg-card;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+
+      .placeholder {
+        color: $color-text-placeholder;
+      }
+
+      .arrow {
+        color: $color-text-tertiary;
+      }
+    }
+  }
+
+  .editActions {
+    margin-top: $spacing-md;
+    display: flex;
+    justify-content: flex-end;
+
+    .saveBtn {
+      padding: $spacing-xs $spacing-lg;
+      background: $gradient-primary;
+      color: $color-text-white;
+      font-size: $font-size-sm;
+      border-radius: $radius-button;
+      font-weight: $font-weight-medium;
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
 .notes {
   .notesText {
     font-size: $font-size-sm;
     color: $color-text-secondary;
     line-height: $line-height-normal;
+  }
+
+  .notesEditor {
+    .notesTextarea {
+      width: 100%;
+      padding: $spacing-md;
+      background-color: $color-bg-page;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+      min-height: 200rpx;
+      box-sizing: border-box;
+      margin-bottom: $spacing-md;
+    }
+
+    .notesActions {
+      display: flex;
+      justify-content: flex-end;
+      gap: $spacing-sm;
+
+      .actionBtn {
+        padding: $spacing-sm $spacing-lg;
+        border-radius: $radius-button;
+        font-size: $font-size-sm;
+
+        &.secondary {
+          background-color: $color-bg-page;
+          color: $color-text-secondary;
+        }
+
+        &.primary {
+          background: $gradient-primary;
+          color: $color-text-white;
+          font-weight: $font-weight-medium;
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  .emptyNotes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-lg 0;
+
+    .emptyIcon {
+      font-size: 60rpx;
+      margin-bottom: $spacing-sm;
+      opacity: 0.5;
+    }
+
+    .emptyText {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+    }
   }
 }
 

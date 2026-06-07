@@ -6,6 +6,23 @@
   padding-bottom: 120rpx;
 }
 
+.header {
+  padding: $spacing-md $page-padding;
+  background-color: $color-bg-card;
+
+  .projectName {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .fileCount {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
+
 .searchBar {
   padding: $spacing-sm $page-padding;
   background-color: $color-bg-card;

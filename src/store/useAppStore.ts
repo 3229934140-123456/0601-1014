@@ -5,6 +5,7 @@ import { tasks as mockTasks } from '@/data/tasks';
 import { meetings as mockMeetings } from '@/data/meetings';
 import { notifications as mockNotifications } from '@/data/notifications';
 import { members as mockMembers, currentUserId as mockCurrentUserId } from '@/data/members';
+import { files as mockFiles } from '@/data/files';
 import { generateId } from '@/utils';
 
 interface AppState {
@@ -12,12 +13,16 @@ interface AppState {
   tasks: Task[];
   meetings: Meeting[];
   notifications: Notification[];
+  files: FileItem[];
   members: Member[];
   currentUserId: string;
 
+  addProjectMember: (projectId: string, memberId: string) => void;
+  removeProjectMember: (projectId: string, memberId: string) => void;
   addProject: (project: Omit<Project, 'id' | 'createdAt' | 'memberCount' | 'taskCount' | 'completedTaskCount' | 'meetingCount' | 'fileCount'> & { memberIds: string[] }) => Project;
   updateProjectStatus: (projectId: string, status: Project['status']) => void;
   getProjectById: (projectId: string) => Project | undefined;
+  getMyProjects: (userId: string) => Project[];
 
   addTask: (task: Omit<Task, 'id' | 'createdAt' | 'comments' | 'attachments'>) => Task;
   updateTaskStatus: (taskId: string, status: Task['status'], completionNote?: string) => void;
@@ -36,6 +41,13 @@ interface AppState {
   setMeetingNotes: (meetingId: string, notes: string) => void;
   getMeetingById: (meetingId: string) => Meeting | undefined;
   getMeetingsByProject: (projectId: string) => Meeting[];
+  generateTaskFromTopic: (meetingId: string, topicId: string, taskData?: Partial<Task>) => Task | undefined;
+
+  addFile: (file: Omit<FileItem, 'id' | 'uploadTime' | 'isFavorite'>) => FileItem;
+  toggleFileFavorite: (fileId: string) => void;
+  getFilesByProject: (projectId: string) => FileItem[];
+  getMyFavoriteFiles: (userId: string) => FileItem[];
+  getFileById: (fileId: string) => FileItem | undefined;
 
   addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) => void;
   markNotificationAsRead: (notificationId: string) => void;
@@ -81,6 +93,43 @@ export const useAppStore = create<AppState>((set, get) => ({
     return newProject;
   },
 
+  addProjectMember: (projectId, memberId) => {
+    set(state => {
+      const project = state.projects.find(p => p.id === projectId);
+      if (!project) return state;
+      
+      const member = state.members.find(m => m.id === memberId);
+      if (!member) return state;
+      
+      if (project.members.some(m => m.id === memberId)) return state;
+      
+      return {
+        projects: state.projects.map(p =>
+          p.id === projectId
+            ? { ...p, members: [...p.members, member], memberCount: p.memberCount + 1 }
+            : p
+        )
+      };
+    });
+  },
+
+  removeProjectMember: (projectId, memberId) => {
+    set(state => {
+      const project = state.projects.find(p => p.id === projectId);
+      if (!project) return state;
+      
+      if (!project.members.some(m => m.id === memberId)) return state;
+      
+      return {
+        projects: state.projects.map(p =>
+          p.id === projectId
+            ? { ...p, members: p.members.filter(m => m.id !== memberId), memberCount: p.memberCount - 1 }
+            : p
+        )
+      };
+    });
+  },
+
   updateProjectStatus: (projectId, status) => {
     set(state => ({
       projects: state.projects.map(p => 
@@ -91,6 +140,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   getProjectById: (projectId) => {
     return get().projects.find(p => p.id === projectId);
+  },
+
+  getMyProjects: (userId) => {
+    return get().projects.filter(p => p.members.some(m => m.id === userId));
   },
 
   addTask: (taskData) => {
@@ -221,13 +274,26 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   addTaskAttachment: (taskId, file) => {
-    set(state => ({
-      tasks: state.tasks.map(t => 
-        t.id === taskId 
-          ? { ...t, attachments: [...t.attachments, file] } 
-          : t
-      )
-    }));
+    set(state => {
+      const task = state.tasks.find(t => t.id === taskId);
+      if (!task) return state;
+      
+      const updatedProjects = state.projects.map(p =>
+        p.id === task.projectId
+          ? { ...p, fileCount: p.fileCount + 1 }
+          : p
+      );
+      
+      return {
+        tasks: state.tasks.map(t => 
+          t.id === taskId 
+            ? { ...t, attachments: [...t.attachments, file] } 
+            : t
+        ),
+        files: [file, ...state.files],
+        projects: updatedProjects
+      };
+    });
   },
 
   getTaskById: (taskId) => {
@@ -347,6 +413,80 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   getMeetingsByProject: (projectId) => {
     return get().meetings.filter(m => m.projectId === projectId);
+  },
+
+  generateTaskFromTopic: (meetingId, topicId, taskData) => {
+    const meeting = get().meetings.find(m => m.id === meetingId);
+    if (!meeting) return undefined;
+    
+    const topic = meeting.topics.find(t => t.id === topicId);
+    if (!topic || topic.taskGenerated) return undefined;
+    
+    const assigneeId = topic.assignee || get().currentUserId;
+    const assigneeMember = get().members.find(m => m.id === assigneeId);
+    
+    const newTask = get().addTask({
+      title: topic.title,
+      description: topic.conclusion || '',
+      status: 'todo',
+      priority: taskData?.priority || 'medium',
+      projectId: meeting.projectId,
+      projectName: meeting.projectName,
+      assigneeId,
+      assigneeName: assigneeMember?.name || '',
+      assigneeAvatar: assigneeMember?.avatar || '',
+      creatorId: get().currentUserId,
+      creatorName: get().getCurrentUser()?.name || '',
+      dueDate: taskData?.dueDate || topic.dueDate
+    });
+    
+    get().updateMeetingTopic(meetingId, topicId, { taskGenerated: true, generatedTaskId: newTask.id });
+    
+    return newTask;
+  },
+
+  addFile: (fileData) => {
+    const newFile: FileItem = {
+      ...fileData,
+      id: `f_${generateId()}`,
+      uploadTime: new Date().toISOString(),
+      isFavorite: false
+    };
+
+    set(state => {
+      const updatedProjects = state.projects.map(p =>
+        p.id === fileData.projectId
+          ? { ...p, fileCount: p.fileCount + 1 }
+          : p
+      );
+      
+      return {
+        files: [newFile, ...state.files],
+        projects: updatedProjects
+      };
+    });
+
+    return newFile;
+  },
+
+  toggleFileFavorite: (fileId) => {
+    set(state => ({
+      files: state.files.map(f =>
+        f.id === fileId ? { ...f, isFavorite: !f.isFavorite } : f
+      )
+    }));
+  },
+
+  getFilesByProject: (projectId) => {
+    return get().files.filter(f => f.projectId === projectId);
+  },
+
+  getMyFavoriteFiles: () => {
+    return get().files.filter(f => f.isFavorite);
+  },
+
+  getFileById: (fileId) => {
+    return get().files.find(f => f.id === fileId);
   },
 
   addNotification: (notificationData) => {

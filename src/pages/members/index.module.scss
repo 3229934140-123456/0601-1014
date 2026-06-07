@@ -6,11 +6,32 @@
   padding-bottom: 120rpx;
 }
 
+.header {
+  padding: $spacing-md $page-padding;
+  background-color: $color-bg-card;
+
+  .projectName {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .memberCount {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
+
 .searchBar {
   padding: $spacing-sm $page-padding;
   background-color: $color-bg-card;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
 
   .searchInput {
+    flex: 1;
     height: 64rpx;
     background-color: $color-bg-page;
     border-radius: $radius-button;
@@ -27,6 +48,27 @@
     .searchText {
       font-size: $font-size-sm;
       color: $color-text-tertiary;
+    }
+  }
+
+  .addBtn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    height: 64rpx;
+    padding: 0 $spacing-md;
+    background: $gradient-primary;
+    border-radius: $radius-button;
+    color: $color-text-white;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+
+    &:active {
+      opacity: 0.8;
+    }
+
+    .addIcon {
+      font-size: $font-size-md;
     }
   }
 }
@@ -133,6 +175,63 @@
   .btnIcon {
     margin-right: $spacing-sm;
     font-size: $font-size-lg;
+  }
+}
+
+.addMemberPanel {
+  margin: $spacing-sm $page-padding;
+  background-color: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+
+  .panelTitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-sm;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.addMemberItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    opacity: 0.7;
+  }
+
+  .smallAvatar {
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 50%;
+    margin-right: $spacing-sm;
+  }
+
+  .memberInfo {
+    flex: 1;
+
+    .memberName {
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+      margin-bottom: 4rpx;
+    }
+
+    .memberDept {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+    }
+  }
+
+  .addMemberBtn {
+    font-size: $font-size-sm;
+    color: $color-primary;
+    font-weight: $font-weight-medium;
   }
 }
 

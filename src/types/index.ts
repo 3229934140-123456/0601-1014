@@ -59,7 +59,9 @@ export interface MeetingTopic {
   title: string;
   conclusion?: string;
   assignee?: string;
+  dueDate?: string;
   taskGenerated?: boolean;
+  generatedTaskId?: string;
 }
 
 export interface Meeting {
