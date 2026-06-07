@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { notifications } from '@/data/notifications';
+import { useAppStore } from '@/store/useAppStore';
 import { Notification } from '@/types';
 import { formatRelativeTime } from '@/utils';
 
@@ -18,41 +18,44 @@ const tabList: { key: TabType; label: string }[] = [
 
 const NotificationsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('all');
-  const [notificationList, setNotificationList] = useState<Notification[]>(notifications);
+  
+  const notifications = useAppStore(state => state.notifications);
+  const markNotificationAsRead = useAppStore(state => state.markNotificationAsRead);
+  const markAllNotificationsAsRead = useAppStore(state => state.markAllNotificationsAsRead);
 
   const filteredNotifications = useMemo(() => {
-    if (activeTab === 'all') return notificationList;
+    if (activeTab === 'all') return notifications;
     if (activeTab === 'mention') {
-      return notificationList.filter(n => n.type === 'mention' || n.type === 'comment');
+      return notifications.filter(n => n.type === 'mention' || n.type === 'comment');
     }
     if (activeTab === 'task') {
-      return notificationList.filter(n => 
+      return notifications.filter(n => 
         n.type === 'task_assigned' || n.type === 'task_due' || n.type === 'task_overdue'
       );
     }
     if (activeTab === 'system') {
-      return notificationList.filter(n => n.type === 'meeting_reminder' || n.type === 'file_uploaded');
+      return notifications.filter(n => n.type === 'meeting_reminder' || n.type === 'file_uploaded');
     }
-    return notificationList;
-  }, [activeTab, notificationList]);
+    return notifications;
+  }, [activeTab, notifications]);
 
   const unreadCount = useMemo(() => {
-    return notificationList.filter(n => !n.isRead).length;
-  }, [notificationList]);
+    return notifications.filter(n => !n.isRead).length;
+  }, [notifications]);
 
   const tabUnreadCounts = useMemo(() => {
     return {
-      task: notificationList.filter(n => 
+      task: notifications.filter(n => 
         !n.isRead && (n.type === 'task_assigned' || n.type === 'task_due' || n.type === 'task_overdue')
       ).length,
-      mention: notificationList.filter(n => 
+      mention: notifications.filter(n => 
         !n.isRead && (n.type === 'mention' || n.type === 'comment')
       ).length,
-      system: notificationList.filter(n => 
+      system: notifications.filter(n => 
         !n.isRead && (n.type === 'meeting_reminder' || n.type === 'file_uploaded')
       ).length
     };
-  }, [notificationList]);
+  }, [notifications]);
 
   const getIconForType = (type: string): string => {
     const iconMap: Record<string, string> = {
@@ -83,9 +86,7 @@ const NotificationsPage: React.FC = () => {
 
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.isRead) {
-      setNotificationList(prev => 
-        prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
-      );
+      markNotificationAsRead(notification.id);
     }
 
     if (notification.relatedType === 'task') {
@@ -96,7 +97,7 @@ const NotificationsPage: React.FC = () => {
   };
 
   const handleMarkAllRead = () => {
-    setNotificationList(prev => prev.map(n => ({ ...n, isRead: true })));
+    markAllNotificationsAsRead();
     Taro.showToast({ title: '已全部标为已读', icon: 'success' });
   };
 

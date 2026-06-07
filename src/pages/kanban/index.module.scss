@@ -154,3 +154,39 @@
     color: $color-text-tertiary;
   }
 }
+
+.taskCardWrapper {
+  position: relative;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.statusChangeBtn {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  padding: 6rpx 12rpx;
+  background: rgba(47, 107, 255, 0.9);
+  border-radius: $radius-sm;
+  z-index: 10;
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  .statusChangeIcon {
+    font-size: 20rpx;
+  }
+
+  .statusChangeText {
+    font-size: 20rpx;
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}

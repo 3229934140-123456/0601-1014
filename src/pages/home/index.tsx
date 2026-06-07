@@ -3,16 +3,21 @@ import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import ProjectCard from '@/components/ProjectCard';
-import { projects } from '@/data/projects';
-import { tasks, getMyTasks } from '@/data/tasks';
-import { currentUserId } from '@/data/members';
-import { members } from '@/data/members';
+import { useAppStore } from '@/store/useAppStore';
 
 const HomePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('active');
+  
+  const projects = useAppStore(state => state.projects);
+  const tasks = useAppStore(state => state.tasks);
+  const currentUserId = useAppStore(state => state.currentUserId);
+  const getCurrentUser = useAppStore(state => state.getCurrentUser);
 
-  const currentUser = members.find(m => m.id === currentUserId);
-  const myTasks = getMyTasks(currentUserId);
+  const currentUser = getCurrentUser();
+  
+  const myTasks = useMemo(() => {
+    return tasks.filter(t => t.assigneeId === currentUserId);
+  }, [tasks, currentUserId]);
 
   const todoCount = myTasks.filter(t => t.status === 'todo').length;
   const inProgressCount = myTasks.filter(t => t.status === 'in_progress').length;
@@ -21,7 +26,7 @@ const HomePage: React.FC = () => {
   const filteredProjects = useMemo(() => {
     if (activeTab === 'all') return projects;
     return projects.filter(p => p.status === activeTab);
-  }, [activeTab]);
+  }, [activeTab, projects]);
 
   const handleSearch = () => {
     Taro.navigateTo({ url: '/pages/search/index' });
@@ -32,11 +37,11 @@ const HomePage: React.FC = () => {
   };
 
   const handleCreateMeeting = () => {
-    Taro.showToast({ title: '创建会议', icon: 'none' });
+    Taro.navigateTo({ url: '/pages/create-meeting/index' });
   };
 
   const handleCreateTask = () => {
-    Taro.showToast({ title: '创建任务', icon: 'none' });
+    Taro.navigateTo({ url: '/pages/create-task/index' });
   };
 
   const handleFiles = () => {
@@ -52,7 +57,7 @@ const HomePage: React.FC = () => {
   const handlePullDownRefresh = () => {
     setTimeout(() => {
       Taro.stopPullDownRefresh();
-    }, 1000);
+    }, 500);
   };
 
   React.useEffect(() => {

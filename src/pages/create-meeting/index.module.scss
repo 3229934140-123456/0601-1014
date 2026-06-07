@@ -1,0 +1,243 @@
+@use '@/styles/variables.scss' as *;
+
+.createMeetingPage {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 140rpx;
+}
+
+.sectionTitle {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  padding: $spacing-md $page-padding $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.formSection {
+  background-color: $color-bg-card;
+  margin: 0 $page-padding;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+}
+
+.formItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .label {
+    width: 160rpx;
+    font-size: $font-size-md;
+    color: $color-text-primary;
+    flex-shrink: 0;
+  }
+
+  .required {
+    color: $color-danger;
+    margin-right: 4rpx;
+  }
+
+  .inputWrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .placeholder {
+      color: $color-text-placeholder;
+    }
+
+    .arrow {
+      color: $color-text-tertiary;
+      font-size: $font-size-lg;
+      margin-left: $spacing-sm;
+    }
+  }
+
+  .input {
+    flex: 1;
+    font-size: $font-size-md;
+    color: $color-text-primary;
+  }
+
+  .textarea {
+    flex: 1;
+    font-size: $font-size-md;
+    color: $color-text-primary;
+    min-height: 100rpx;
+    padding: $spacing-sm 0;
+  }
+}
+
+.timeRange {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  .timePicker {
+    flex: 1;
+    padding: $spacing-sm 0;
+    font-size: $font-size-md;
+    color: $color-text-primary;
+
+    &.placeholder {
+      color: $color-text-placeholder;
+    }
+  }
+
+  .timeDivider {
+    color: $color-text-tertiary;
+    font-size: $font-size-md;
+  }
+}
+
+.attendeeSelector {
+  padding: $spacing-md 0;
+}
+
+.attendeeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.attendeeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120rpx;
+  position: relative;
+
+  .avatar {
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: $spacing-xs;
+    border: 4rpx solid transparent;
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &.selected {
+    .avatar {
+      border-color: $color-primary;
+    }
+  }
+
+  .checkBadge {
+    position: absolute;
+    top: 0;
+    right: 8rpx;
+    width: 36rpx;
+    height: 36rpx;
+    border-radius: 50%;
+    background-color: $color-primary;
+    color: $color-text-white;
+    font-size: 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .name {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.topicsSection {
+  padding: $spacing-md 0;
+}
+
+.topicItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .topicInput {
+    flex: 1;
+    padding: $spacing-sm $spacing-md;
+    background-color: $color-bg-page;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+  }
+
+  .deleteBtn {
+    width: 56rpx;
+    height: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-tertiary;
+    font-size: $font-size-lg;
+  }
+}
+
+.addTopicBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm 0;
+  color: $color-primary;
+  font-size: $font-size-sm;
+
+  .addIcon {
+    font-size: $font-size-md;
+  }
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background-color: $color-bg-card;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.submitBtn {
+  height: 88rpx;
+  border-radius: $radius-md;
+  background: $gradient-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+
+  &.disabled {
+    opacity: 0.5;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}

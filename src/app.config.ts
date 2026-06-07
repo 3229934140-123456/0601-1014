@@ -12,6 +12,8 @@ export default defineAppConfig({
     'pages/task-detail/index',
     'pages/meeting-detail/index',
     'pages/create-project/index',
+    'pages/create-task/index',
+    'pages/create-meeting/index',
     'pages/search/index'
   ],
   window: {

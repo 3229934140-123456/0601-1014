@@ -2,14 +2,26 @@ import React from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import styles from './index.module.scss';
-import { projects } from '@/data/projects';
+import { useAppStore } from '@/store/useAppStore';
 import StatusTag from '@/components/StatusTag';
 import { formatDate } from '@/utils';
 
 const ProjectDetailPage: React.FC = () => {
   const router = useRouter();
   const projectId = router.params.id || 'p1';
-  const project = projects.find(p => p.id === projectId) || projects[0];
+  
+  const project = useAppStore(state => state.getProjectById(projectId));
+  const updateProjectStatus = useAppStore(state => state.updateProjectStatus);
+
+  if (!project) {
+    return (
+      <View className={styles.projectDetailPage}>
+        <View style={{ padding: '100rpx', textAlign: 'center' }}>
+          <Text>项目不存在</Text>
+        </View>
+      </View>
+    );
+  }
 
   const progress = project.taskCount > 0 
     ? Math.round((project.completedTaskCount / project.taskCount) * 100) 
@@ -28,17 +40,20 @@ const ProjectDetailPage: React.FC = () => {
   };
 
   const handleCreateMeeting = () => {
-    Taro.showToast({ title: '创建会议', icon: 'none' });
+    Taro.navigateTo({ url: `/pages/create-meeting/index?projectId=${project.id}` });
   };
 
   const handleArchive = () => {
+    const isArchived = project.status === 'archived';
     Taro.showModal({
       title: '提示',
-      content: project.status === 'archived' ? '确定要激活此项目吗？' : '确定要归档此项目吗？',
+      content: isArchived ? '确定要激活此项目吗？' : '确定要归档此项目吗？',
       success: (res) => {
         if (res.confirm) {
+          const newStatus = isArchived ? 'active' : 'archived';
+          updateProjectStatus(project.id, newStatus);
           Taro.showToast({ 
-            title: project.status === 'archived' ? '已激活' : '已归档', 
+            title: isArchived ? '已激活' : '已归档', 
             icon: 'success' 
           });
         }
@@ -47,7 +62,7 @@ const ProjectDetailPage: React.FC = () => {
   };
 
   const handleAddMember = () => {
-    Taro.showToast({ title: '邀请成员', icon: 'none' });
+    Taro.showToast({ title: '邀请成员功能开发中', icon: 'none' });
   };
 
   return (

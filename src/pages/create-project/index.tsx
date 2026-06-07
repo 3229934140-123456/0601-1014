@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Input, Textarea, Image, ScrollView } from '@tarojs/components';
+import { View, Text, Input, Textarea, Image, ScrollView, Picker } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { members } from '@/data/members';
+import { useAppStore } from '@/store/useAppStore';
 
 const colorOptions = [
   '#2F6BFF',
@@ -19,7 +19,14 @@ const CreateProjectPage: React.FC = () => {
   const [projectDesc, setProjectDesc] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
-  const [selectedMembers, setSelectedMembers] = useState<string[]>(['m1', 'm3']);
+  const [selectedMembers, setSelectedMembers] = useState<string[]>(['m1']);
+
+  const members = useAppStore(state => state.members);
+  const currentUserId = useAppStore(state => state.currentUserId);
+  const getCurrentUser = useAppStore(state => state.getCurrentUser);
+  const addProject = useAppStore(state => state.addProject);
+
+  const currentUser = getCurrentUser();
 
   const toggleMember = (memberId: string) => {
     setSelectedMembers(prev => {
@@ -30,12 +37,12 @@ const CreateProjectPage: React.FC = () => {
     });
   };
 
-  const handleDateSelect = () => {
-    Taro.showToast({ title: '选择日期', icon: 'none' });
+  const handleDateChange = (e: any) => {
+    setEndDate(e.detail.value);
   };
 
   const handleAddMember = () => {
-    Taro.showToast({ title: '邀请成员', icon: 'none' });
+    Taro.showToast({ title: '邀请成员功能开发中', icon: 'none' });
   };
 
   const handleSubmit = () => {
@@ -44,14 +51,35 @@ const CreateProjectPage: React.FC = () => {
       return;
     }
 
+    if (selectedMembers.length === 0) {
+      Taro.showToast({ title: '请至少选择一名成员', icon: 'none' });
+      return;
+    }
+
     Taro.showLoading({ title: '创建中...' });
-    setTimeout(() => {
+    
+    try {
+      const newProject = addProject({
+        name: projectName.trim(),
+        description: projectDesc.trim(),
+        status: 'active',
+        coverColor: selectedColor,
+        creatorId: currentUserId,
+        creatorName: currentUser?.name || '当前用户',
+        memberIds: selectedMembers,
+        endDate: endDate || undefined
+      });
+
       Taro.hideLoading();
       Taro.showToast({ title: '创建成功', icon: 'success' });
+      
       setTimeout(() => {
         Taro.navigateBack();
-      }, 1000);
-    }, 1500);
+      }, 800);
+    } catch (error) {
+      Taro.hideLoading();
+      Taro.showToast({ title: '创建失败，请重试', icon: 'none' });
+    }
   };
 
   const canSubmit = projectName.trim().length > 0;
@@ -91,12 +119,14 @@ const CreateProjectPage: React.FC = () => {
           </View>
           <View className={styles.formItem}>
             <Text className={styles.label}>截止日期</Text>
-            <View className={styles.inputWrapper} onClick={handleDateSelect}>
-              <Text className={endDate ? '' : styles.placeholder}>
-                {endDate || '请选择截止日期'}
-              </Text>
-              <Text className={styles.arrow}>›</Text>
-            </View>
+            <Picker mode="date" value={endDate} onChange={handleDateChange}>
+              <View className={styles.inputWrapper}>
+                <Text className={endDate ? '' : styles.placeholder}>
+                  {endDate || '请选择截止日期'}
+                </Text>
+                <Text className={styles.arrow}>›</Text>
+              </View>
+            </Picker>
           </View>
         </View>
 
@@ -118,7 +148,7 @@ const CreateProjectPage: React.FC = () => {
         <View className={styles.formSection}>
           <View className={styles.memberSelector}>
             <View className={styles.memberList}>
-              {members.slice(0, 8).map(member => (
+              {members.map(member => (
                 <View
                   key={member.id}
                   className={classnames(styles.memberItem, selectedMembers.includes(member.id) && styles.selected)}
@@ -133,15 +163,6 @@ const CreateProjectPage: React.FC = () => {
                   <Text className={styles.name}>{member.name}</Text>
                 </View>
               ))}
-              <View 
-                className={classnames(styles.memberItem, styles.addMember)}
-                onClick={handleAddMember}
-              >
-                <View className={styles.avatar}>
-                  <Text>+</Text>
-                </View>
-                <Text className={styles.name}>添加</Text>
-              </View>
             </View>
           </View>
         </View>

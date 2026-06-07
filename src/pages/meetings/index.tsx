@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
 import MeetingCard from '@/components/MeetingCard';
-import { meetings, getUpcomingMeetings, getFinishedMeetings } from '@/data/meetings';
+import { useAppStore } from '@/store/useAppStore';
 import { formatDate } from '@/utils';
 import dayjs from 'dayjs';
 
@@ -12,12 +12,15 @@ type TabType = 'upcoming' | 'finished';
 const MeetingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('upcoming');
 
+  const meetings = useAppStore(state => state.meetings);
+
   const displayedMeetings = useMemo(() => {
+    const now = new Date();
     if (activeTab === 'upcoming') {
-      return getUpcomingMeetings();
+      return meetings.filter(m => new Date(m.startTime) >= now || m.status === 'upcoming');
     }
-    return getFinishedMeetings();
-  }, [activeTab]);
+    return meetings.filter(m => new Date(m.endTime) < now || m.status === 'finished');
+  }, [activeTab, meetings]);
 
   const groupedMeetings = useMemo(() => {
     const groups: Record<string, typeof meetings> = {};
@@ -32,7 +35,7 @@ const MeetingsPage: React.FC = () => {
   }, [displayedMeetings]);
 
   const handleCreateMeeting = () => {
-    Taro.showToast({ title: '安排会议', icon: 'none' });
+    Taro.navigateTo({ url: '/pages/create-meeting/index' });
   };
 
   const handleSearch = () => {

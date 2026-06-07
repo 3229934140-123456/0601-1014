@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import classnames from 'classnames';
 import styles from './index.module.scss';
 import TaskCard from '@/components/TaskCard';
-import { tasks } from '@/data/tasks';
+import { useAppStore } from '@/store/useAppStore';
 import { TaskStatus, Task } from '@/types';
 
 interface KanbanColumn {
@@ -21,10 +22,13 @@ const columns: KanbanColumn[] = [
 
 const KanbanPage: React.FC = () => {
   const [filterProject, setFilterProject] = useState<string>('all');
-  const [localTasks, setLocalTasks] = useState<Task[]>(tasks);
+
+  const tasks = useAppStore(state => state.tasks);
+  const projects = useAppStore(state => state.projects);
+  const updateTaskStatus = useAppStore(state => state.updateTaskStatus);
 
   const getTasksByStatus = (status: TaskStatus): Task[] => {
-    let filtered = localTasks.filter(t => t.status === status);
+    let filtered = tasks.filter(t => t.status === status);
     if (filterProject !== 'all') {
       filtered = filtered.filter(t => t.projectId === filterProject);
     }
@@ -32,7 +36,7 @@ const KanbanPage: React.FC = () => {
   };
 
   const handleAddTask = () => {
-    Taro.showToast({ title: '创建任务', icon: 'none' });
+    Taro.navigateTo({ url: '/pages/create-task/index' });
   };
 
   const handleTaskClick = (taskId: string) => {
@@ -41,11 +45,43 @@ const KanbanPage: React.FC = () => {
     });
   };
 
-  const handleFilterProject = () => {
+  const handleStatusChange = (taskId: string, taskTitle: string, currentStatus: TaskStatus) => {
+    const statusLabels = ['待开始', '进行中', '待审核', '已完成'];
+    const statusKeys: TaskStatus[] = ['todo', 'in_progress', 'review', 'done'];
+    
     Taro.showActionSheet({
-      itemList: ['全部项目', '电商平台重构', '移动端App', '数据分析平台'],
+      itemList: statusLabels.map((label, index) => 
+        statusKeys[index] === currentStatus ? `${label} (当前)` : label
+      ),
       success: (res) => {
-        const projectIds = ['all', 'p1', 'p2', 'p3'];
+        const newStatus = statusKeys[res.tapIndex];
+        if (newStatus !== currentStatus) {
+          if (newStatus === 'done') {
+            Taro.showModal({
+              title: '完成任务',
+              content: `确定要将「${taskTitle}」标记为已完成吗？`,
+              success: (modalRes) => {
+                if (modalRes.confirm) {
+                  updateTaskStatus(taskId, 'done', '任务已完成');
+                  Taro.showToast({ title: '已更新状态', icon: 'success' });
+                }
+              }
+            });
+          } else {
+            updateTaskStatus(taskId, newStatus);
+            Taro.showToast({ title: '已更新状态', icon: 'success' });
+          }
+        }
+      }
+    });
+  };
+
+  const handleFilterProject = () => {
+    const projectNames = ['全部项目', ...projects.map(p => p.name)];
+    Taro.showActionSheet({
+      itemList: projectNames,
+      success: (res) => {
+        const projectIds = ['all', ...projects.map(p => p.id)];
         setFilterProject(projectIds[res.tapIndex]);
       }
     });
@@ -54,7 +90,7 @@ const KanbanPage: React.FC = () => {
   const handlePullDownRefresh = () => {
     setTimeout(() => {
       Taro.stopPullDownRefresh();
-    }, 1000);
+    }, 500);
   };
 
   React.useEffect(() => {
@@ -102,11 +138,22 @@ const KanbanPage: React.FC = () => {
                 <View className={styles.columnBody}>
                   {columnTasks.length > 0 ? (
                     columnTasks.map(task => (
-                      <TaskCard 
-                        key={task.id} 
-                        task={task} 
-                        onClick={() => handleTaskClick(task.id)}
-                      />
+                      <View key={task.id} className={styles.taskCardWrapper}>
+                        <TaskCard 
+                          task={task} 
+                          onClick={() => handleTaskClick(task.id)}
+                        />
+                        <View 
+                          className={styles.statusChangeBtn}
+                          onClick={(e) => {
+                            e.stopPropagation?.();
+                            handleStatusChange(task.id, task.title, task.status);
+                          }}
+                        >
+                          <Text className={styles.statusChangeIcon}>⚡</Text>
+                          <Text className={styles.statusChangeText}>改状态</Text>
+                        </View>
+                      </View>
                     ))
                   ) : (
                     <View className={styles.emptyColumn}>
