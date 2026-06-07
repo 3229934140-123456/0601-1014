@@ -1,0 +1,172 @@
+@use '@/styles/variables.scss' as *;
+
+.filesPage {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.searchBar {
+  padding: $spacing-sm $page-padding;
+  background-color: $color-bg-card;
+
+  .searchInput {
+    height: 64rpx;
+    background-color: $color-bg-page;
+    border-radius: $radius-button;
+    display: flex;
+    align-items: center;
+    padding: 0 $spacing-md;
+
+    .searchIcon {
+      font-size: $font-size-md;
+      color: $color-text-tertiary;
+      margin-right: $spacing-sm;
+    }
+
+    .searchText {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+    }
+  }
+}
+
+.filterBar {
+  display: flex;
+  padding: $spacing-sm $page-padding;
+  gap: $spacing-sm;
+  background-color: $color-bg-card;
+  border-bottom: 1rpx solid $color-divider;
+
+  .filterItem {
+    padding: 8rpx 20rpx;
+    background-color: $color-bg-page;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+
+    &.active {
+      background-color: rgba(47, 107, 255, 0.1);
+      color: $color-primary;
+      font-weight: $font-weight-medium;
+    }
+  }
+}
+
+.fileList {
+  padding: $spacing-sm $page-padding;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+
+  &:active {
+    background-color: $color-bg-hover;
+  }
+
+  .fileIcon {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36rpx;
+    margin-right: $spacing-md;
+    background-color: $color-bg-tag;
+
+    &.doc {
+      background-color: rgba(47, 107, 255, 0.1);
+    }
+    &.pdf {
+      background-color: rgba(245, 63, 63, 0.1);
+    }
+    &.excel {
+      background-color: rgba(0, 180, 42, 0.1);
+    }
+    &.ppt {
+      background-color: rgba(255, 125, 0, 0.1);
+    }
+    &.design {
+      background-color: rgba(114, 46, 209, 0.1);
+    }
+  }
+
+  .fileInfo {
+    flex: 1;
+    min-width: 0;
+
+    .fileName {
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      font-weight: $font-weight-medium;
+      @include text-ellipsis;
+      margin-bottom: 8rpx;
+    }
+
+    .fileMeta {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+
+      .dot {
+        margin: 0 8rpx;
+      }
+    }
+  }
+
+  .favoriteBtn {
+    font-size: 32rpx;
+    padding: $spacing-sm;
+    margin-left: $spacing-sm;
+  }
+}
+
+.fabButton {
+  position: fixed;
+  right: $spacing-lg;
+  bottom: 140rpx;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: $radius-round;
+  background: $gradient-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(47, 107, 255, 0.4);
+  z-index: 100;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  .fabIcon {
+    font-size: 48rpx;
+    color: $color-text-white;
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+
+  .emptyIcon {
+    font-size: 100rpx;
+    margin-bottom: $spacing-md;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: $font-size-md;
+    color: $color-text-tertiary;
+  }
+}

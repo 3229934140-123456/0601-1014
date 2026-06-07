@@ -1,0 +1,272 @@
+@use '@/styles/variables.scss' as *;
+
+.projectDetailPage {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.projectHeader {
+  background: $gradient-primary;
+  padding: $spacing-xl $page-padding;
+  color: $color-text-white;
+
+  .projectName {
+    font-size: $font-size-xxl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+  }
+
+  .projectDesc {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: $line-height-normal;
+    margin-bottom: $spacing-lg;
+  }
+
+  .projectMeta {
+    display: flex;
+    gap: $spacing-lg;
+
+    .metaItem {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-xs;
+      color: rgba(255, 255, 255, 0.7);
+
+      .metaIcon {
+        margin-right: 8rpx;
+      }
+    }
+  }
+}
+
+.content {
+  padding: $spacing-md $page-padding;
+  margin-top: -30rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.statsCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+
+  .progressSection {
+    margin-bottom: $spacing-lg;
+
+    .progressHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-sm;
+
+      .progressLabel {
+        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        color: $color-text-primary;
+      }
+
+      .progressPercent {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        color: $color-primary;
+      }
+    }
+
+    .progressBar {
+      height: 16rpx;
+      background-color: $color-bg-tag;
+      border-radius: $radius-round;
+      overflow: hidden;
+
+      .progressFill {
+        height: 100%;
+        background: $gradient-primary;
+        border-radius: $radius-round;
+        transition: width $transition-base;
+      }
+    }
+  }
+
+  .statsGrid {
+    display: flex;
+    justify-content: space-around;
+
+    .statItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .statNumber {
+        font-size: 36rpx;
+        font-weight: $font-weight-semibold;
+        color: $color-text-primary;
+      }
+
+      .statLabel {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+        margin-top: 8rpx;
+      }
+    }
+  }
+}
+
+.quickActions {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  .actionsGrid {
+    display: flex;
+    justify-content: space-between;
+
+    .actionItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      &:active {
+        opacity: 0.7;
+      }
+
+      .actionIcon {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: $radius-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36rpx;
+        margin-bottom: $spacing-xs;
+
+        &.files {
+          background: rgba(47, 107, 255, 0.1);
+        }
+        &.members {
+          background: rgba(0, 180, 42, 0.1);
+        }
+        &.review {
+          background: rgba(114, 46, 209, 0.1);
+        }
+        &.meeting {
+          background: rgba(255, 125, 0, 0.1);
+        }
+      }
+
+      .actionLabel {
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+      }
+    }
+  }
+}
+
+.membersSection {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-md;
+
+    .sectionTitle {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+
+    .viewAll {
+      font-size: $font-size-sm;
+      color: $color-primary;
+    }
+  }
+
+  .membersGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    .memberItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 20%;
+
+      .avatar {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: $radius-round;
+        overflow: hidden;
+        margin-bottom: 8rpx;
+
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .name {
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+        @include text-ellipsis;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + constant(safe-area-inset-bottom));
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: $spacing-md;
+
+  .btn {
+    flex: 1;
+    height: $button-height-md;
+    border-radius: $radius-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+
+    &.secondary {
+      background-color: $color-bg-tag;
+      color: $color-text-primary;
+    }
+
+    &.primary {
+      background: $gradient-primary;
+      color: $color-text-white;
+    }
+  }
+}

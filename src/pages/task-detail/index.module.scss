@@ -1,0 +1,332 @@
+@use '@/styles/variables.scss' as *;
+
+.taskDetailPage {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.taskHeader {
+  background-color: $color-bg-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+
+  .taskTitle {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    line-height: $line-height-tight;
+    margin-bottom: $spacing-md;
+  }
+
+  .taskMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    .metaItem {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+
+      .metaIcon {
+        margin-right: 8rpx;
+        font-size: $font-size-md;
+      }
+    }
+  }
+}
+
+.section {
+  background-color: $color-bg-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .sectionAction {
+      font-size: $font-size-sm;
+      color: $color-primary;
+      font-weight: $font-weight-normal;
+    }
+  }
+}
+
+.description {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.assigneeSection {
+  display: flex;
+  align-items: center;
+
+  .avatar {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: $radius-round;
+    margin-right: $spacing-md;
+    overflow: hidden;
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .info {
+    flex: 1;
+
+    .name {
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      font-weight: $font-weight-medium;
+    }
+
+    .role {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+      margin-top: 4rpx;
+    }
+  }
+
+  .changeBtn {
+    font-size: $font-size-sm;
+    color: $color-primary;
+  }
+}
+
+.statusSelector {
+  display: flex;
+  gap: $spacing-sm;
+
+  .statusOption {
+    flex: 1;
+    padding: $spacing-sm;
+    border-radius: $radius-sm;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    background-color: $color-bg-tag;
+    transition: all $transition-base;
+
+    &.active {
+      background-color: rgba(47, 107, 255, 0.1);
+      color: $color-primary;
+      font-weight: $font-weight-medium;
+    }
+  }
+}
+
+.attachmentList {
+  .attachmentItem {
+    display: flex;
+    align-items: center;
+    padding: $spacing-sm 0;
+    border-bottom: 1rpx solid $color-divider;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .fileIcon {
+      width: 64rpx;
+      height: 64rpx;
+      border-radius: $radius-sm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28rpx;
+      margin-right: $spacing-md;
+      background-color: rgba(47, 107, 255, 0.1);
+    }
+
+    .fileInfo {
+      flex: 1;
+      min-width: 0;
+
+      .fileName {
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        @include text-ellipsis;
+      }
+
+      .fileSize {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+        margin-top: 4rpx;
+      }
+    }
+  }
+}
+
+.commentSection {
+  .commentHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+
+    .commentTitle {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+
+    .commentCount {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+    }
+  }
+
+  .commentList {
+    margin-bottom: $spacing-md;
+  }
+
+  .commentItem {
+    display: flex;
+    margin-bottom: $spacing-lg;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .avatar {
+      width: 64rpx;
+      height: 64rpx;
+      border-radius: $radius-round;
+      margin-right: $spacing-md;
+      flex-shrink: 0;
+      overflow: hidden;
+
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .commentContent {
+      flex: 1;
+      min-width: 0;
+
+      .commentHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8rpx;
+
+        .author {
+          font-size: $font-size-sm;
+          color: $color-text-primary;
+          font-weight: $font-weight-medium;
+        }
+
+        .time {
+          font-size: $font-size-xs;
+          color: $color-text-tertiary;
+        }
+      }
+
+      .commentText {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        line-height: $line-height-normal;
+
+        .mention {
+          color: $color-primary;
+        }
+      }
+    }
+  }
+
+  .commentInput {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    .input {
+      flex: 1;
+      height: 72rpx;
+      background-color: $color-bg-page;
+      border-radius: $radius-button;
+      padding: 0 $spacing-md;
+      font-size: $font-size-sm;
+    }
+
+    .sendBtn {
+      height: 72rpx;
+      padding: 0 $spacing-lg;
+      background: $gradient-primary;
+      border-radius: $radius-button;
+      color: $color-text-white;
+      font-size: $font-size-sm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.completionNote {
+  padding: $spacing-md;
+  background-color: rgba(0, 180, 42, 0.05);
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-success;
+
+  .noteTitle {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-success;
+    margin-bottom: 8rpx;
+  }
+
+  .noteContent {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: $line-height-normal;
+  }
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + constant(safe-area-inset-bottom));
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: $spacing-md;
+
+  .btn {
+    flex: 1;
+    height: $button-height-md;
+    border-radius: $radius-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+
+    &.secondary {
+      background-color: $color-bg-tag;
+      color: $color-text-primary;
+    }
+
+    &.primary {
+      background: $gradient-primary;
+      color: $color-text-white;
+    }
+  }
+}

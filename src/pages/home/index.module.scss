@@ -1,0 +1,241 @@
+@use '@/styles/variables.scss' as *;
+
+.homePage {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  background: $gradient-primary;
+  padding: 100rpx $page-padding 80rpx;
+  position: relative;
+
+  .headerTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-lg;
+
+    .greeting {
+      .hello {
+        font-size: $font-size-lg;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .userName {
+        font-size: $font-size-xxl;
+        font-weight: $font-weight-bold;
+        color: $color-text-white;
+        margin-top: 8rpx;
+      }
+    }
+
+    .userAvatar {
+      width: 88rpx;
+      height: 88rpx;
+      border-radius: $radius-round;
+      border: 4rpx solid rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .searchBar {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: $radius-button;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    padding: 0 $spacing-lg;
+
+    .searchIcon {
+      font-size: $font-size-lg;
+      margin-right: $spacing-sm;
+    }
+
+    .searchText {
+      flex: 1;
+      font-size: $font-size-sm;
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+
+.content {
+  padding: 0 $page-padding;
+  margin-top: -40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.quickActions {
+  display: flex;
+  justify-content: space-between;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg $spacing-md;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-lg;
+
+  .actionItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+
+    &:active {
+      opacity: 0.7;
+    }
+
+    .actionIcon {
+      width: 88rpx;
+      height: 88rpx;
+      border-radius: $radius-lg;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40rpx;
+      margin-bottom: $spacing-sm;
+
+      &.create {
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.1), rgba(47, 107, 255, 0.2));
+      }
+      &.meeting {
+        background: linear-gradient(135deg, rgba(54, 207, 201, 0.1), rgba(54, 207, 201, 0.2));
+      }
+      &.task {
+        background: linear-gradient(135deg, rgba(114, 46, 209, 0.1), rgba(114, 46, 209, 0.2));
+      }
+      &.file {
+        background: linear-gradient(135deg, rgba(255, 125, 0, 0.1), rgba(255, 125, 0, 0.2));
+      }
+    }
+
+    .actionLabel {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.todoOverview {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-lg;
+
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .viewAll {
+      font-size: $font-size-sm;
+      color: $color-primary;
+      font-weight: $font-weight-normal;
+    }
+  }
+
+  .statsRow {
+    display: flex;
+    gap: $spacing-md;
+
+    .statCard {
+      flex: 1;
+      padding: $spacing-md;
+      border-radius: $radius-md;
+
+      &.todo {
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.08), rgba(47, 107, 255, 0.15));
+      }
+      &.inProgress {
+        background: linear-gradient(135deg, rgba(54, 207, 201, 0.08), rgba(54, 207, 201, 0.15));
+      }
+      &.overdue {
+        background: linear-gradient(135deg, rgba(245, 63, 63, 0.08), rgba(245, 63, 63, 0.15));
+      }
+
+      .statNumber {
+        font-size: 48rpx;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+        line-height: 1.2;
+      }
+
+      .statLabel {
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+        margin-top: 8rpx;
+      }
+    }
+  }
+}
+
+.section {
+  margin-bottom: $spacing-lg;
+
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+
+    .sectionTitle {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+
+    .sectionMore {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+    }
+  }
+
+  .tabs {
+    display: flex;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-md;
+
+    .tab {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      padding-bottom: 8rpx;
+      border-bottom: 4rpx solid transparent;
+      transition: all $transition-base;
+
+      &.active {
+        color: $color-primary;
+        font-weight: $font-weight-semibold;
+        border-bottom-color: $color-primary;
+      }
+    }
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+
+  .emptyIcon {
+    font-size: 80rpx;
+    margin-bottom: $spacing-md;
+  }
+
+  .emptyText {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}

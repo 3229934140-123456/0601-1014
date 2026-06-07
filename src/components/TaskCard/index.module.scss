@@ -1,0 +1,148 @@
+@use '@/styles/variables.scss' as *;
+
+.taskCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-card-hover;
+  }
+
+  .taskHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: $spacing-sm;
+
+    .taskTitle {
+      flex: 1;
+      font-size: $font-size-md;
+      font-weight: $font-weight-medium;
+      color: $color-text-primary;
+      line-height: $line-height-tight;
+      @include text-ellipsis-multi(2);
+      margin-right: $spacing-sm;
+    }
+
+    .priorityDot {
+      width: 12rpx;
+      height: 12rpx;
+      border-radius: $radius-round;
+      flex-shrink: 0;
+      margin-top: 8rpx;
+
+      &.high {
+        background-color: $color-error;
+      }
+      &.medium {
+        background-color: $color-warning;
+      }
+      &.low {
+        background-color: $color-text-tertiary;
+      }
+    }
+  }
+
+  .taskProject {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin-bottom: $spacing-sm;
+  }
+
+  .taskFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .assignee {
+      display: flex;
+      align-items: center;
+
+      .avatar {
+        width: 40rpx;
+        height: 40rpx;
+        border-radius: $radius-round;
+        margin-right: 8rpx;
+      }
+
+      .name {
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+      }
+    }
+
+    .dueDate {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-xs;
+
+      &.overdue {
+        color: $color-error;
+      }
+      &.dueSoon {
+        color: $color-warning;
+      }
+      &.normal {
+        color: $color-text-tertiary;
+      }
+    }
+  }
+
+  .taskMeta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-top: $spacing-sm;
+    padding-top: $spacing-sm;
+    border-top: 1rpx solid $color-divider;
+
+    .metaItem {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+
+      .metaIcon {
+        margin-right: 4rpx;
+        font-size: 20rpx;
+      }
+    }
+  }
+}
+
+.compactTaskCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  margin-bottom: $spacing-xs;
+  box-shadow: $shadow-card;
+
+  .taskTitle {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    @include text-ellipsis;
+    margin-bottom: 8rpx;
+  }
+
+  .taskInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .avatar {
+      width: 32rpx;
+      height: 32rpx;
+      border-radius: $radius-round;
+    }
+
+    .dueDate {
+      font-size: 20rpx;
+      color: $color-text-tertiary;
+    }
+  }
+}

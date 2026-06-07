@@ -1,0 +1,111 @@
+@use '@/styles/variables.scss' as *;
+
+.meetingCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-card-hover;
+  }
+
+  .cardHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+
+    .meetingTitle {
+      flex: 1;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+      @include text-ellipsis;
+      margin-right: $spacing-sm;
+    }
+  }
+
+  .meetingInfo {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+
+    .infoRow {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+
+      .infoIcon {
+        margin-right: $spacing-sm;
+        font-size: $font-size-md;
+        width: 32rpx;
+        text-align: center;
+      }
+
+      .infoText {
+        flex: 1;
+      }
+    }
+  }
+
+  .divider {
+    height: 1rpx;
+    background-color: $color-divider;
+    margin-bottom: $spacing-md;
+  }
+
+  .cardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .organizer {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+
+      .avatar {
+        width: 40rpx;
+        height: 40rpx;
+        border-radius: $radius-round;
+        margin-right: $spacing-xs;
+      }
+    }
+  }
+
+  .topicPreview {
+    margin-bottom: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+    background-color: $color-bg-page;
+    border-radius: $radius-sm;
+
+    .topicTitle {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      margin-bottom: 8rpx;
+
+      .dot {
+        display: inline-block;
+        width: 8rpx;
+        height: 8rpx;
+        border-radius: $radius-round;
+        background-color: $color-primary;
+        margin-right: 8rpx;
+        vertical-align: middle;
+      }
+    }
+
+    .topicText {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+      @include text-ellipsis-multi(2);
+    }
+  }
+}

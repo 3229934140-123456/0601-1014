@@ -1,0 +1,42 @@
+// ============================================
+// 主题配色变量
+// ============================================
+
+// 品牌主题色：专业蓝
+$color-primary: #2F6BFF;
+$color-primary-light: #5B8DFF;
+$color-primary-dark: #1E4FD9;
+
+// 辅助色
+$color-secondary: #36CFC9;
+$color-secondary-light: #5DDDD8;
+$color-purple: #722ED1;
+$color-purple-light: #9254DE;
+
+// 功能色
+$color-success: #00B42A;
+$color-warning: #FF7D00;
+$color-error: #F53F3F;
+$color-info: #2F6BFF;
+
+// 背景色
+$color-bg-page: #F5F7FA;
+$color-bg-card: #FFFFFF;
+$color-bg-hover: #F2F3F5;
+$color-bg-tag: #F2F3F5;
+
+// 文本色
+$color-text-primary: #1D2129;
+$color-text-secondary: #4E5969;
+$color-text-tertiary: #86909C;
+$color-text-disabled: #C9CDD4;
+$color-text-white: #FFFFFF;
+
+// 边框色
+$color-border: #E5E6EB;
+$color-divider: #F2F3F5;
+
+// 渐变
+$gradient-primary: linear-gradient(135deg, #2F6BFF 0%, #5B8DFF 100%);
+$gradient-secondary: linear-gradient(135deg, #36CFC9 0%, #5DDDD8 100%);
+$gradient-warm: linear-gradient(135deg, #FF7D00 0%, #FF9A2E 100%);

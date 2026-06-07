@@ -1,0 +1,156 @@
+@use '@/styles/variables.scss' as *;
+
+.kanbanPage {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+.filterBar {
+  background-color: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  box-shadow: $shadow-card;
+
+  .filterItem {
+    display: flex;
+    align-items: center;
+    padding: 8rpx 20rpx;
+    background-color: $color-bg-page;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+
+    .filterIcon {
+      margin-right: 8rpx;
+      font-size: $font-size-sm;
+    }
+
+    &.active {
+      background-color: rgba(47, 107, 255, 0.1);
+      color: $color-primary;
+    }
+  }
+
+  .searchBtn {
+    margin-left: auto;
+    font-size: $font-size-lg;
+  }
+}
+
+.kanbanContainer {
+  flex: 1;
+  overflow: hidden;
+}
+
+.kanbanScroll {
+  white-space: nowrap;
+  padding: $spacing-md;
+  height: 100%;
+}
+
+.kanbanColumn {
+  display: inline-block;
+  width: 560rpx;
+  margin-right: $spacing-md;
+  vertical-align: top;
+  white-space: normal;
+  height: 100%;
+
+  .columnHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-md;
+    background-color: $color-bg-card;
+    border-radius: $radius-md $radius-md 0 0;
+    border-bottom: 1rpx solid $color-divider;
+
+    .columnTitle {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+
+      .countBadge {
+        margin-left: $spacing-sm;
+        padding: 2rpx 12rpx;
+        background-color: $color-bg-tag;
+        border-radius: $radius-round;
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+        font-weight: $font-weight-normal;
+      }
+    }
+
+    .addBtn {
+      font-size: $font-size-lg;
+      color: $color-text-tertiary;
+      width: 48rpx;
+      height: 48rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:active {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .columnBody {
+    background-color: $color-bg-page;
+    border-radius: 0 0 $radius-md $radius-md;
+    padding: $spacing-sm;
+    min-height: 400rpx;
+    max-height: calc(100vh - 360rpx);
+    overflow-y: auto;
+  }
+}
+
+.fabButton {
+  position: fixed;
+  right: $spacing-lg;
+  bottom: 140rpx;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: $radius-round;
+  background: $gradient-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(47, 107, 255, 0.4);
+  z-index: 100;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  .fabIcon {
+    font-size: 48rpx;
+    color: $color-text-white;
+  }
+}
+
+.emptyColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 20rpx;
+
+  .emptyIcon {
+    font-size: 56rpx;
+    opacity: 0.5;
+    margin-bottom: $spacing-sm;
+  }
+
+  .emptyText {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}

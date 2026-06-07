@@ -1,0 +1,78 @@
+@use '@/styles/variables.scss' as *;
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  line-height: 1.4;
+  white-space: nowrap;
+
+  &.todo {
+    color: $color-text-secondary;
+    background-color: $color-bg-tag;
+  }
+
+  &.inProgress {
+    color: $color-primary;
+    background-color: rgba(47, 107, 255, 0.1);
+  }
+
+  &.review {
+    color: $color-warning;
+    background-color: rgba(255, 125, 0, 0.1);
+  }
+
+  &.done {
+    color: $color-success;
+    background-color: rgba(0, 180, 42, 0.1);
+  }
+
+  &.upcoming {
+    color: $color-primary;
+    background-color: rgba(47, 107, 255, 0.1);
+  }
+
+  &.ongoing {
+    color: $color-success;
+    background-color: rgba(0, 180, 42, 0.1);
+  }
+
+  &.finished {
+    color: $color-text-tertiary;
+    background-color: $color-bg-tag;
+  }
+
+  &.active {
+    color: $color-primary;
+    background-color: rgba(47, 107, 255, 0.1);
+  }
+
+  &.archived {
+    color: $color-text-tertiary;
+    background-color: $color-bg-tag;
+  }
+
+  &.paused {
+    color: $color-warning;
+    background-color: rgba(255, 125, 0, 0.1);
+  }
+
+  &.high {
+    color: $color-error;
+    background-color: rgba(245, 63, 63, 0.1);
+  }
+
+  &.medium {
+    color: $color-warning;
+    background-color: rgba(255, 125, 0, 0.1);
+  }
+
+  &.low {
+    color: $color-text-secondary;
+    background-color: $color-bg-tag;
+  }
+}
