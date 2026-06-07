@@ -12,6 +12,7 @@ const taskTabs = [
   { key: 'todo', label: '待开始' },
   { key: 'in_progress', label: '进行中' },
   { key: 'review', label: '待审核' },
+  { key: 'done', label: '已完成' },
   { key: 'overdue', label: '已逾期' }
 ];
 
@@ -82,11 +83,7 @@ const MinePage: React.FC = () => {
   };
 
   const handleMyFavorites = () => {
-    if (myProjects.length > 0) {
-      Taro.navigateTo({ url: `/pages/files/index?projectId=${myProjects[0].id}&filter=favorite` });
-    } else {
-      Taro.showToast({ title: '暂无项目', icon: 'none' });
-    }
+    Taro.navigateTo({ url: `/pages/files/index?projectId=all&filter=favorite` });
   };
 
   const handleWeeklyReport = () => {
@@ -145,7 +142,7 @@ const MinePage: React.FC = () => {
           <Text className={styles.statLabel}>参与项目</Text>
         </View>
         <View className={styles.divider} />
-        <View className={styles.statItem} onClick={() => setActiveTaskTab('in_progress')}>
+        <View className={styles.statItem} onClick={() => setActiveTaskTab('done')}>
           <Text className={styles.statNumber}>{completedTasks}</Text>
           <Text className={styles.statLabel}>已完成任务</Text>
         </View>

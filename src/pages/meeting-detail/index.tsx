@@ -15,6 +15,7 @@ const MeetingDetailPage: React.FC = () => {
   const updateMeetingTopic = useAppStore(state => state.updateMeetingTopic);
   const setMeetingNotes = useAppStore(state => state.setMeetingNotes);
   const generateTaskFromTopic = useAppStore(state => state.generateTaskFromTopic);
+  const getTaskById = useAppStore(state => state.getTaskById);
   const members = useAppStore(state => state.members);
 
   const [editingTopicId, setEditingTopicId] = useState<string | null>(null);
@@ -41,7 +42,7 @@ const MeetingDetailPage: React.FC = () => {
   };
 
   const handleUpdateConclusion = (topicId: string, conclusion: string) => {
-    updateMeetingTopic(topicId, topicId, { conclusion });
+    updateMeetingTopic(meetingId, topicId, { conclusion });
   };
 
   const handleUpdateAssignee = (topicId: string) => {
@@ -58,14 +59,29 @@ const MeetingDetailPage: React.FC = () => {
     updateMeetingTopic(meetingId, topicId, { dueDate });
   };
 
-  const handleGenerateTask = (topic: MeetingTopic) => {
-    if (topic.taskGenerated) {
-      if (topic.generatedTaskId) {
-        Taro.navigateTo({ url: `/pages/task-detail/index?id=${topic.generatedTaskId}` });
-      }
+  const handleViewGeneratedTask = (topic: MeetingTopic) => {
+    if (!topic.generatedTaskId) {
+      handleRegenerateTask(topic);
       return;
     }
 
+    const task = getTaskById(topic.generatedTaskId);
+    if (task) {
+      Taro.navigateTo({ url: `/pages/task-detail/index?id=${topic.generatedTaskId}` });
+    } else {
+      Taro.showModal({
+        title: '任务不存在',
+        content: '关联的任务已被删除，是否重新生成任务？',
+        success: (res) => {
+          if (res.confirm) {
+            handleRegenerateTask(topic);
+          }
+        }
+      });
+    }
+  };
+
+  const handleRegenerateTask = (topic: MeetingTopic) => {
     Taro.showModal({
       title: '生成任务',
       content: `确定要从议题「${topic.title}」生成任务吗？`,
@@ -78,6 +94,15 @@ const MeetingDetailPage: React.FC = () => {
         }
       }
     });
+  };
+
+  const handleGenerateTask = (topic: MeetingTopic) => {
+    if (topic.taskGenerated && topic.generatedTaskId) {
+      handleViewGeneratedTask(topic);
+      return;
+    }
+
+    handleRegenerateTask(topic);
   };
 
   const handleEditNotes = () => {
@@ -183,11 +208,12 @@ const MeetingDetailPage: React.FC = () => {
                     {topic.taskGenerated && (
                       <View 
                         className={styles.topicTag}
-                        onClick={() => topic.generatedTaskId && Taro.navigateTo({ 
-                          url: `/pages/task-detail/index?id=${topic.generatedTaskId}` 
-                        })}
+                        onClick={(e) => {
+                          e.stopPropagation?.();
+                          handleViewGeneratedTask(topic);
+                        }}
                       >
-                        已生成任务 →
+                        {getTaskById(topic.generatedTaskId || '') ? '已生成任务 →' : '任务已失效 ↻'}
                       </View>
                     )}
                   </View>
@@ -293,14 +319,14 @@ const MeetingDetailPage: React.FC = () => {
                         </View>
                       )}
 
-                      {topic.taskGenerated && topic.generatedTaskId && (
+                      {topic.taskGenerated && (
                         <View 
                           className={styles.viewTaskBtn}
-                          onClick={() => Taro.navigateTo({ 
-                            url: `/pages/task-detail/index?id=${topic.generatedTaskId}` 
-                          })}
+                          onClick={() => handleViewGeneratedTask(topic)}
                         >
-                          <Text>查看生成的任务 →</Text>
+                          {getTaskById(topic.generatedTaskId || '') 
+                            ? '查看生成的任务 →' 
+                            : '任务已失效，重新生成 ↻'}
                         </View>
                       )}
                     </View>

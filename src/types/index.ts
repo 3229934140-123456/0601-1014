@@ -52,6 +52,7 @@ export interface FileItem {
   uploadTime: string;
   isFavorite: boolean;
   projectId: string;
+  taskId?: string;
 }
 
 export interface MeetingTopic {

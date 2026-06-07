@@ -137,6 +137,19 @@
         margin: 0 8rpx;
       }
     }
+
+    .fileProject {
+      margin-top: 8rpx;
+
+      .projectTag {
+        display: inline-block;
+        font-size: $font-size-xs;
+        color: $color-primary;
+        background-color: rgba(47, 107, 255, 0.1);
+        padding: 4rpx 12rpx;
+        border-radius: $radius-sm;
+      }
+    }
   }
 
   .favoriteBtn {

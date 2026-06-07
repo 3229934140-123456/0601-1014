@@ -90,20 +90,25 @@ const TaskDetailPage: React.FC = () => {
       itemList: mockFiles.map(f => f.name),
       success: (res) => {
         const file = mockFiles[res.tapIndex];
-        const newFile: FileItem = {
-          id: `f_${generateId()}`,
+        const result = addTaskAttachment(task.id, {
           name: file.name,
           type: file.type,
           size: file.size,
           url: '#',
           uploaderId: currentUserId,
           uploaderName: currentUser?.name || '',
-          uploadTime: new Date().toISOString(),
-          isFavorite: false,
           projectId: task.projectId
-        };
-        addTaskAttachment(task.id, newFile);
-        Taro.showToast({ title: '附件已添加', icon: 'success' });
+        });
+        
+        if (result) {
+          if (result.isDuplicate && !result.wasAttached) {
+            Taro.showToast({ title: '文件已在附件中', icon: 'none' });
+          } else if (result.isDuplicate && result.wasAttached) {
+            Taro.showToast({ title: '已添加已有文件', icon: 'success' });
+          } else {
+            Taro.showToast({ title: '附件已添加', icon: 'success' });
+          }
+        }
       }
     });
   };

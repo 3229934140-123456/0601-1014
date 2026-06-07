@@ -28,7 +28,7 @@ interface AppState {
   updateTaskStatus: (taskId: string, status: Task['status'], completionNote?: string) => void;
   updateTaskAssignee: (taskId: string, assigneeId: string, assigneeName: string, assigneeAvatar: string) => void;
   addTaskComment: (taskId: string, comment: { content: string; authorId: string; authorName: string; authorAvatar: string; mentions?: string[] }) => void;
-  addTaskAttachment: (taskId: string, file: FileItem) => void;
+  addTaskAttachment: (taskId: string, file: Omit<FileItem, 'id' | 'uploadTime' | 'isFavorite'>) => { file: FileItem; isDuplicate: boolean; wasAttached: boolean } | undefined;
   getTaskById: (taskId: string) => Task | undefined;
   getTasksByProject: (projectId: string) => Task[];
   getTasksByStatus: (status: Task['status']) => Task[];
@@ -46,7 +46,7 @@ interface AppState {
   addFile: (file: Omit<FileItem, 'id' | 'uploadTime' | 'isFavorite'>) => FileItem;
   toggleFileFavorite: (fileId: string) => void;
   getFilesByProject: (projectId: string) => FileItem[];
-  getMyFavoriteFiles: (userId: string) => FileItem[];
+  getMyFavoriteFiles: () => FileItem[];
   getFileById: (fileId: string) => FileItem | undefined;
 
   addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) => void;
@@ -273,27 +273,62 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
 
-  addTaskAttachment: (taskId, file) => {
+  addTaskAttachment: (taskId, fileData) => {
+    const state = get();
+    const task = state.tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const existingFile = state.files.find(
+      f => f.projectId === task.projectId && f.name === fileData.name
+    );
+
+    let fileToAdd: FileItem;
+
+    if (existingFile) {
+      fileToAdd = existingFile;
+    } else {
+      fileToAdd = {
+        ...fileData,
+        id: `f_${generateId()}`,
+        uploadTime: new Date().toISOString(),
+        isFavorite: false,
+        projectId: task.projectId
+      } as FileItem;
+    }
+
+    const alreadyAttached = task.attachments.some(a => a.id === fileToAdd.id);
+
     set(state => {
       const task = state.tasks.find(t => t.id === taskId);
       if (!task) return state;
-      
-      const updatedProjects = state.projects.map(p =>
-        p.id === task.projectId
-          ? { ...p, fileCount: p.fileCount + 1 }
-          : p
-      );
-      
+
+      let newFiles = state.files;
+      let updatedProjects = state.projects;
+      let newAttachments = task.attachments;
+
+      if (!existingFile) {
+        newFiles = [fileToAdd, ...state.files];
+        updatedProjects = state.projects.map(p =>
+          p.id === task.projectId
+            ? { ...p, fileCount: p.fileCount + 1 }
+            : p
+        );
+      }
+
+      if (!alreadyAttached) {
+        newAttachments = [...task.attachments, fileToAdd];
+      }
+
       return {
-        tasks: state.tasks.map(t => 
-          t.id === taskId 
-            ? { ...t, attachments: [...t.attachments, file] } 
-            : t
+        tasks: state.tasks.map(t =>
+          t.id === taskId ? { ...t, attachments: newAttachments } : t
         ),
-        files: [file, ...state.files],
+        files: newFiles,
         projects: updatedProjects
       };
     });
+
+    return { file: fileToAdd, isDuplicate: !!existingFile, wasAttached: !alreadyAttached };
   },
 
   getTaskById: (taskId) => {
